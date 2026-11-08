@@ -1,0 +1,39 @@
+name: labx-containment-array
+
+services:
+  labx_containment_array_native:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: native
+    restart: unless-stopped
+    ports:
+      - "34120:34120"
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 256m
+    cpus: 0.5
+  labx_containment_array_visual:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: visual
+    restart: unless-stopped
+    depends_on:
+      - labx_containment_array_native
+    ports:
+      - "127.0.0.1:34121:34121"
+    environment:
+      WEB_PORT: "34121"
+      NATIVE_HOST: labx_containment_array_native
+      NATIVE_PORT: "34120"
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 256m
+    cpus: 0.5

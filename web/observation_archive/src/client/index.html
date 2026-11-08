@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#101819" />
+  <meta name="description" content="Архив наблюдений Лаборатории X" />
+  <title>Архив наблюдений · Лаборатория X</title>
+  <link rel="icon" href="/assets/archive-mark.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="app-shell" id="app-shell">
+    <header class="topbar"><div class="brand"><span class="brand-symbol" aria-hidden="true">LX</span><div><strong>Архив наблюдений</strong><span>Лаборатория X · Системы ALICE</span></div></div><button id="help-button" class="secondary-button" type="button">Управление</button></header>
+
+    <main class="viewport">
+      <nav class="station-nav" aria-label="Посты архива">
+        <button class="station-link active" type="button" data-station="overview" aria-current="page">Помещение</button>
+        <button class="station-link" type="button" data-station="ledger">Журнал</button>
+        <button class="station-link" type="button" data-station="evidence">Калибровка</button>
+        <button class="station-link" type="button" data-station="archive">Закрытый раздел</button>
+      </nav>
+
+      <div class="scene-zone" id="scene-zone">
+        <canvas id="scene-canvas" aria-hidden="true"></canvas>
+        <div class="scene-prompt" id="scene-prompt">Выберите пост в помещении или вкладку сверху.</div>
+        <div class="scene-controls">Перетаскивание — обзор · Колесо — масштаб · Нажмите на пульт</div>
+      </div>
+
+      <aside class="detail-panel" id="detail-panel" aria-live="polite">
+        <div class="panel-topline"><span>Архивный пост ALICE</span><button id="panel-close" class="text-button" type="button" aria-label="Вернуться в помещение">К помещению</button></div>
+
+        <section class="panel-content active" data-panel="overview" aria-labelledby="overview-title">
+          <h1 id="overview-title">Журнал наблюдений</h1>
+          <p class="lead">После пробела журнал ALICE снова ведётся. Ниже — восстановленные записи первых суток.</p>
+          <div class="section-divider"><h3>Недавние записи</h3><button class="text-button" type="button" data-station="ledger">Открыть журнал</button></div>
+          <div id="overview-ledger-list" class="ledger-list" aria-live="polite"><p class="empty-state">Загрузка записей…</p></div>
+          <div class="overview-actions"><button class="secondary-button" type="button" data-station="evidence">Проверка оттиска</button><button class="secondary-button" type="button" data-station="archive">Закрытый раздел</button></div>
+        </section>
+
+        <section class="panel-content" data-panel="ledger" aria-labelledby="ledger-title" hidden>
+          <h2 id="ledger-title">Журнал инцидентов</h2>
+          <p class="lead">Записи из восстановленного указателя наблюдений.</p>
+          <div class="ledger-controls"><label for="ledger-filter">Поиск по журналу</label><input id="ledger-filter" type="search" placeholder="Номер, заголовок или заметка" autocomplete="off" /></div>
+          <div id="ledger-list" class="ledger-list" aria-live="polite"><p class="empty-state">Загрузка записей…</p></div>
+          <p class="record-note">В копиях первой записи поле оператора выглядит по-разному.</p>
+        </section>
+
+        <section class="panel-content" data-panel="evidence" aria-labelledby="evidence-title" hidden>
+          <h2 id="evidence-title">Проверка оттиска</h2>
+          <p class="lead">Служебная страница печатает контрольный оттиск с вашим CSS. Скрипты и внешние ресурсы в её браузере закрыты.</p>
+          <div class="review-state"><div><span>Оттиск</span><code id="plate-id">Не сохранён</code></div><div><span>Проверка</span><strong id="review-state">Ожидание</strong></div></div>
+          <form id="evidence-form" class="terminal-form">
+            <div class="form-heading"><label for="evidence-payload">Таблица стилей (CSS)</label><span>Не более 16 КБ</span></div>
+            <textarea id="evidence-payload" name="css" spellcheck="false" rows="8" placeholder="body { ... }" aria-describedby="css-help"></textarea>
+            <p class="form-help" id="css-help">После проверки локальные диагностические запросы появятся ниже.</p>
+            <div class="form-actions"><button id="save-calibration" class="secondary-button" type="submit">Сохранить CSS</button><button id="review-button" class="primary-button" type="button">Отправить на проверку</button></div>
+            <p class="form-status" id="evidence-status" role="status">Таблица стилей не сохранена.</p>
+          </form>
+          <div class="section-divider"><h3>Журнал запросов <span id="telemetry-count">0 запросов</span></h3><button class="text-button" id="telemetry-refresh" type="button">Обновить</button></div>
+          <div id="telemetry-list" class="telemetry-list" aria-live="polite"><div class="empty-state">Запросов пока нет.</div></div>
+        </section>
+
+        <section class="panel-content" data-panel="archive" aria-labelledby="archive-title" hidden>
+          <h2 id="archive-title">Закрытый раздел</h2>
+          <p class="lead">Введите ключ архива, чтобы прочитать запечатанную запись.</p>
+          <form id="archive-form" class="terminal-form">
+            <div class="form-heading"><label for="archive-token">Ключ доступа</label></div>
+            <input id="archive-token" name="token" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="12 шестнадцатеричных символов" />
+            <button class="primary-button wide" type="submit">Открыть запись</button>
+            <p class="form-status" id="archive-status" role="status">Ожидание ключа.</p>
+          </form>
+          <div id="archive-result" class="archive-result" hidden></div>
+        </section>
+      </aside>
+    </main>
+
+    <footer class="statusbar"><span>ALICE · Режим наблюдения</span><span>Лаборатория X · Архив наблюдений</span></footer>
+    <div class="loading-screen" id="scene-loading" role="status" aria-live="polite">Загрузка помещения…</div>
+    <div class="scene-fallback" id="scene-fallback" hidden><strong>3D-модель недоступна</strong><p>Вкладки и архивные инструменты продолжают работать.</p></div>
+    <dialog id="help-dialog" class="help-dialog" aria-labelledby="help-title"><div class="dialog-header"><h2 id="help-title">Управление</h2><button id="help-close" class="text-button" type="button">Закрыть</button></div><dl><div><dt>Выбор поста</dt><dd>Используйте вкладки, нажмите на пульт или клавиши 1, 2, 3.</dd></div><div><dt>Осмотр помещения</dt><dd>Перетаскивайте сцену мышью.</dd></div><div><dt>Масштаб</dt><dd>Прокрутите колесо мыши.</dd></div><div><dt>Возврат</dt><dd>Нажмите Escape.</dd></div></dl></dialog>
+  </div>
+  <script type="module" src="/scene.js"></script>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

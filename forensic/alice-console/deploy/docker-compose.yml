@@ -1,0 +1,54 @@
+name: alice_console
+services:
+  alice_console:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: web
+      args:
+        FLAG: ${FLAG:?Set FLAG}
+    networks:
+      - back
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,nodev,size=16m
+    cap_drop:
+      - ALL
+    cap_add:
+      - SETUID
+      - SETGID
+    ulimits:
+      nproc: 1000
+    restart: unless-stopped
+    mem_limit: 512m
+    cpus: 1.0
+
+  alice_edge:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: edge
+    environment:
+      UPSTREAM: alice_console:8080
+    ports:
+      - '127.0.0.1:18112:8080'
+    networks:
+      - front
+      - back
+    depends_on:
+      - alice_console
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,nodev,size=16m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    mem_limit: 64m
+    cpus: 0.25
+
+networks:
+  front: {}
+  back:
+    internal: true

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% set active = 'home' %}
+
+{% block content %}
+<div class="page-head">
+    <h1>Публичный терминал</h1>
+    <p class="subtitle">Учёт аномалий Лаборатории X</p>
+</div>
+
+<div class="card">
+    <h2>О терминале</h2>
+    <p class="lead">Через этот терминал наблюдатели ведут учёт аномалий. Записи давно не обновляются вручную, но терминал всё ещё отвечает.</p>
+</div>
+
+<div class="card">
+    <h2>Сводка <span class="tag">архив</span></h2>
+    <div class="stat-row">
+        <div class="stat"><div class="num">847</div><div class="lbl">аномалий в архиве</div></div>
+        <div class="stat"><div class="num">3</div><div class="lbl">действующих допуска</div></div>
+        <div class="stat"><div class="num">1</div><div class="lbl">резервный допуск</div></div>
+        <div class="stat"><div class="num">2018</div><div class="lbl">последняя синхронизация</div></div>
+    </div>
+</div>
+
+<div class="cols">
+    <div class="card">
+        <h2>Разделы</h2>
+        <div class="quick">
+            {% if user %}
+            <a href="/cards">Карточки аномалий <span class="arrow">→</span></a>
+            <a href="/registry">Реестр личного состава <span class="arrow">→</span></a>
+            {% else %}
+            <a href="/login">Вход <span class="arrow">→</span></a>
+            <a href="/register">Регистрация наблюдателя <span class="arrow">→</span></a>
+            {% endif %}
+            <a href="/diagnostics">Диагностика узла <span class="arrow">→</span></a>
+            <a href="/bulletin">Оповещения <span class="arrow">→</span></a>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Последние события</h2>
+        <table class="data">
+            <tbody>
+                <tr><td class="muted">03:14</td><td>плановая самопроверка</td><td><span class="status-ok">ok</span></td></tr>
+                <tr><td class="muted">03:00</td><td>ротация журналов</td><td><span class="status-ok">ok</span></td></tr>
+                <tr><td class="muted">02:41</td><td>синхронизация реестра</td><td><span class="status-ok">ok</span></td></tr>
+                <tr><td class="muted">00:30</td><td>копирование архива</td><td><span class="status-ok">ok</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

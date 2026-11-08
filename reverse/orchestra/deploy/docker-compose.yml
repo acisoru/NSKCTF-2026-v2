@@ -1,0 +1,15 @@
+services:
+  orchestra:
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:9898:8080"
+    env_file:
+      - flag.env
+    restart: unless-stopped
+    mem_limit: 256m
+    cpus: 1.0
+    pids_limit: 64
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,noexec,nosuid

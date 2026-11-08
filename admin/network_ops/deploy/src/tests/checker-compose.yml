@@ -1,0 +1,10 @@
+name: labx-network-qa
+services:
+  checker_qa:
+    image: labx-network-checker:local
+    privileged: true
+    environment:
+      CHECKER_TOKEN: local-network-qa-only-token-not-for-production
+    ports: ["127.0.0.1:9135:9134"]
+    cpus: 2.5
+    mem_limit: 3g

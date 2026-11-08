@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вечерние демонстрации — фотодневник наблюдений</title>
+<style>
+  :root { --bg:#14161b; --card:#1b1e25; --ink:#d6d2c4; --dim:#8c8676; --line:#2a2e37; --accent:#c7a86a; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+         font-family: Georgia, "Times New Roman", serif; line-height:1.55; }
+  header { border-bottom:1px solid var(--line); padding:34px 20px 24px; text-align:center;
+           background:linear-gradient(180deg,#191c22,#14161b); }
+  header h1 { margin:0; font-size:1.9rem; letter-spacing:2px; font-variant:small-caps; color:var(--ink); }
+  header .by { color:var(--dim); font-size:.95rem; margin-top:6px; }
+  header .by b { color:var(--accent); font-weight:normal; }
+  header .intro { max-width:640px; margin:16px auto 0; color:var(--dim); font-size:.92rem; }
+  .wrap { max-width:1000px; margin:0 auto; padding:26px 16px 60px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:22px; }
+  figure { margin:0; background:var(--card); border:1px solid var(--line); border-radius:4px;
+           overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.35); }
+  figure img { width:100%; display:block; filter:saturate(.85) contrast(1.02); }
+  figcaption { padding:10px 13px 13px; font-size:.9rem; }
+  figcaption .date { color:var(--dim); font-size:.78rem; letter-spacing:1px; text-transform:uppercase; }
+  figcaption .txt { margin-top:3px; }
+  .feature { grid-column:1 / -1; display:grid; grid-template-columns:minmax(300px,1.3fr) 1fr; }
+  .feature img { height:100%; object-fit:cover; }
+  .feature figcaption { align-self:center; padding:22px 26px; }
+  .feature .txt { font-size:1.05rem; color:var(--ink); }
+  .feature .mark { color:var(--accent); }
+  footer { border-top:1px solid var(--line); color:var(--dim); font-size:.82rem;
+           text-align:center; padding:22px 16px; }
+  @media (max-width:640px){ .feature{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Вечерние демонстрации</h1>
+  <div class="by">фотодневник наблюдений · подпись: <b>mr. Fade</b></div>
+  <div class="intro">
+    Рефлектор, монтировка и набор окуляров — со склада отделения. По вечерам
+    собираю всех желающих и показываю небо. Здесь — кадры сезона.
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="grid">
+
+    <figure>
+      <img src="photos/telescope_mount.jpg" alt="монтировка">
+      <figcaption><div class="date">2018 · апрель</div>
+      <div class="txt">Рефлектор 200 мм на монтировке. Готовлю к вечернему показу.</div></figcaption>
+    </figure>
+
+    <figure>
+      <img src="photos/evening_sky.jpg" alt="закат">
+      <figcaption><div class="date">2018 · май</div>
+      <div class="txt">Закат над полигоном. Скоро первые звёзды.</div></figcaption>
+    </figure>
+
+    <figure>
+      <img src="photos/eyepieces.jpg" alt="окуляры">
+      <figcaption><div class="date">2018 · май</div>
+      <div class="txt">Новый набор окуляров — 6, 10 и 25 мм. Пробую по очереди.</div></figcaption>
+    </figure>
+
+    <figure>
+      <img src="photos/crescent.jpg" alt="месяц">
+      <figcaption><div class="date">2018 · июнь</div>
+      <div class="txt">Молодой месяц. Подстроил вторичное зеркало, картинка резче.</div></figcaption>
+    </figure>
+
+    <figure>
+      <img src="photos/night_stars.jpg" alt="небо">
+      <figcaption><div class="date">2018 · июль</div>
+      <div class="txt">Чистое небо, ни облачка. Идеальный вечер для демонстрации.</div></figcaption>
+    </figure>
+
+    <figure>
+      <img src="photos/lab_distant.jpg" alt="корпус">
+      <figcaption><div class="date">2018 · сентябрь</div>
+      <div class="txt">Корпус B издалека. Поздно, а там ещё горит свет.</div></figcaption>
+    </figure>
+
+    <figure class="feature">
+      <img src="photos/moon_last_show.jpg" alt="Луна, последний показ">
+      <figcaption><div class="date">2018 · вечер перед инцидентом</div>
+      <div class="txt">Последний показ. Как всегда — Луна. Смотрели вот <span class="mark">сюда</span>
+      (отметил перекрестием).</div></figcaption>
+    </figure>
+
+  </div>
+</div>
+
+<footer>фотодневник «Вечерние демонстрации» · наблюдательная группа · сезон 2018</footer>
+</body>
+</html>

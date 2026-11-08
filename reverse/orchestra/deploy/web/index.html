@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#212529">
+  <title>Orchestra</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="container navigation" aria-label="Навигация">
+      <span class="brand">orchestra</span>
+      <div class="nav-links">
+        <a href="/download/lead-part-tester" download="lead-part-tester">скачать lead-part-tester</a>
+      </div>
+    </nav>
+  </header>
+  <main class="container">
+    <h1>ABC notation</h1>
+    <form id="score-form">
+      <div class="parts">
+        <section class="part" aria-labelledby="lead-title">
+          <div class="part-title">
+            <h2 id="lead-title"><label for="melody">Lead</label></h2>
+          </div>
+          <textarea id="melody" aria-labelledby="lead-title" spellcheck="false" autocomplete="off" autocapitalize="off" required></textarea>
+        </section>
+        <section class="part" aria-labelledby="piano-title">
+          <div class="part-title">
+            <h2 id="piano-title"><label for="rhythm">Piano</label></h2>
+          </div>
+          <textarea id="rhythm" aria-labelledby="piano-title" spellcheck="false" autocomplete="off" autocapitalize="off" readonly aria-readonly="true"></textarea>
+        </section>
+        <section class="part" aria-labelledby="bass-title">
+          <div class="part-title">
+            <h2 id="bass-title"><label for="bass">Bass</label></h2>
+          </div>
+          <textarea id="bass" aria-labelledby="bass-title" spellcheck="false" autocomplete="off" autocapitalize="off" readonly aria-readonly="true"></textarea>
+        </section>
+      </div>
+      <div class="actions">
+        <button id="submit" type="submit" disabled>Check</button>
+        <span class="score-meta">D minor · 3/4</span>
+      </div>
+    </form>
+    <div id="result" role="status" aria-live="polite" hidden></div>
+  </main>
+  <footer class="site-footer">
+    <div class="container footer-content"><span>Orchestra</span><span>ABC notation</span></div>
+  </footer>
+</body>
+</html>

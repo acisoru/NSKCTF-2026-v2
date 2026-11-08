@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель допуска — Лаборатория X</title>
+    <link rel="stylesheet" href="/static/style.css?v=20">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">ЛАБОРАТОРИЯ&nbsp;X <span class="logo-sep">//</span> ПАНЕЛЬ ДОПУСКА</div>
+        <div class="menu">
+            <a href="/">Главная</a>
+            <a href="/journal">Журнал карт</a>
+            <a href="/support">Техподдержка</a>
+            <a href="/alerts">Оповещения</a>
+            {% if user %}
+                <a href="/panel">Панель оператора</a>
+                <a href="/logout">Выйти ({{ user }})</a>
+            {% else %}
+                <a href="/login">Вход</a>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+    <footer>
+        <p>Архив 2018 · восстановлено из резервной копии · сборка 0.9.3</p>
+    </footer>
+</body>
+</html>

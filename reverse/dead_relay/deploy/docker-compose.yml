@@ -1,0 +1,14 @@
+name: nskctf-dead-relay
+
+services:
+  nsk_reverse_dead_relay:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "34320:34320"
+    mem_limit: 256m
+    cpus: 1.0
+    read_only: true
+    pids_limit: 128

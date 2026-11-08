@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Пульт аварийного контура</title>
+<link rel="icon" href="data:,">
+<style>
+:root { --bg: #070c09; --line: #1d3226; --phosphor: #74dda5; --dim: #4f8a6c; --alarm: #ff5a4f; }
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--phosphor); }
+body { font: 14px/1.55 "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace; }
+main { width: min(560px, 100%); margin: 0 auto; padding: 20px 16px 40px; }
+header { display: flex; justify-content: space-between; gap: 16px; padding-bottom: 10px; color: var(--dim); }
+#panel { position: relative; aspect-ratio: 1; overflow: hidden; border: 1px solid var(--line); background: url(cam-115a.webp) center / 100% 100%; touch-action: manipulation; }
+#panel::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(0,0,0,.22) 0 1px, transparent 1px 3px); }
+#socket { position: absolute; left: 27%; top: 22%; width: 49%; height: 49%; border-radius: 50%; background: radial-gradient(circle at 50% 45%, #020202 55%, #1a120b 100%); box-shadow: inset 0 6px 24px #000; opacity: 0; }
+#press { position: absolute; left: 27%; top: 22%; width: 49%; height: 49%; padding: 0; border: 0; border-radius: 50%; background: url(cam-115a.webp) 52.94% 42.3% / 204% 204%; cursor: pointer; transition: filter .25s, transform .08s; }
+#press:disabled { filter: grayscale(.9) brightness(.42); cursor: not-allowed; }
+#press:active { transform: scale(.95); }
+#press:focus-visible { outline: 2px solid var(--phosphor); outline-offset: 4px; }
+#press.wait { filter: brightness(.6); cursor: progress; }
+.loose #socket { opacity: 1; }
+#count { margin: 14px 0 6px; font-size: 30px; letter-spacing: 3px; font-variant-numeric: tabular-nums; }
+#count small { font-size: 14px; color: var(--dim); letter-spacing: 1px; }
+#log { min-height: 74px; padding: 0; margin: 0; list-style: none; }
+#log li { padding-left: 16px; text-indent: -16px; }
+#log li::before { content: "> "; color: var(--dim); }
+#log li.refused { color: var(--alarm); }
+#flag { display: block; margin-top: 14px; padding: 10px 12px; border: 1px solid var(--phosphor); overflow-wrap: anywhere; user-select: all; }
+#flag[hidden] { display: none; }
+@media (prefers-reduced-motion: reduce) { #press { transition: none; } #press:active { transform: none; } }
+</style>
+</head>
+<body>
+<main>
+  <header><span>Лаборатория X</span><span>пульт аварийного контура</span></header>
+  <div id="panel">
+    <div id="socket"></div>
+    <button id="press" type="button" aria-label="DON'T PRESS" disabled></button>
+  </div>
+  <div id="count" aria-live="polite">0000 <small>/ 1000</small></div>
+  <ul id="log" aria-live="polite"></ul>
+  <code id="flag" hidden></code>
+</main>
+<script>
+const panel = document.getElementById('panel');
+const button = document.getElementById('press');
+const count = document.getElementById('count');
+const log = document.getElementById('log');
+const flag = document.getElementById('flag');
+let stage = 'locked';
+let cooldown = 0;
+let readyAt = 0;
+
+function render(data) {
+  stage = data.stage;
+  cooldown = data.cooldown;
+  count.firstChild.textContent = String(data.presses).padStart(4, '0') + ' ';
+  log.replaceChildren(...data.lines.map(line => {
+    const item = document.createElement('li');
+    item.textContent = line;
+    if (line.includes('ОТКАЗ')) item.className = 'refused';
+    return item;
+  }));
+  panel.classList.toggle('loose', stage === 'loose');
+  if (stage !== 'locked') button.disabled = false;
+  if (stage === 'loose') {
+    jump();
+  } else {
+    button.style.left = '';
+    button.style.top = '';
+  }
+  if (data.flag) {
+    flag.textContent = data.flag;
+    flag.hidden = false;
+  }
+}
+
+function jump() {
+  const free = panel.clientWidth - button.offsetWidth;
+  button.style.left = Math.random() * free + 'px';
+  button.style.top = Math.random() * free + 'px';
+}
+
+async function press() {
+  if (Date.now() < readyAt) return;
+  const response = await fetch('/api/press', { method: 'POST' });
+  render(await response.json());
+  if (stage === 'counter') {
+    readyAt = Date.now() + cooldown * 1000;
+    button.classList.add('wait');
+    setTimeout(() => button.classList.remove('wait'), cooldown * 1000);
+  }
+}
+
+panel.addEventListener('pointermove', event => {
+  if (stage !== 'loose') return;
+  const box = button.getBoundingClientRect();
+  const dx = event.clientX - (box.left + box.width / 2);
+  const dy = event.clientY - (box.top + box.height / 2);
+  if (Math.hypot(dx, dy) < box.width / 2 + 40) jump();
+});
+button.addEventListener('click', press);
+fetch('/api/state').then(response => response.json()).then(render);
+</script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#131d1b">
+  <meta name="description" content="NIGHTLINE — ночной диспетчерский тренажёр из карантинного архива ALICE.">
+  <title>NIGHTLINE · Лаборатория X</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="/static/fonts/golos-text.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10H3zM9 20v-7h6v7"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24"><path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2zm6-2v16m6-14v16"/></symbol>
+    <symbol id="i-note" viewBox="0 0 24 24"><path d="M14 3H4v18h16V9zm0 0v6h6M8 13h8m-8 4h5"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.3 9a2.7 2.7 0 1 1 4.4 2.1c-1.3.8-1.7 1.3-1.7 2.9m0 3h.01"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14M12 5v14"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-fit" viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5M8 8h8v8H8z"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 0 1 14 0Z"/><circle cx="12" cy="10" r="2"/></symbol>
+    <symbol id="i-undo" viewBox="0 0 24 24"><path d="m8 5-5 5 5 5M3 10h11a6 6 0 0 1 0 12"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V3H4v13h4"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5M6 6a8 8 0 0 1 13 3M5 15a8 8 0 0 0 13 3"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+  </svg>
+  <a class="skip-link" href="#workspace">Перейти к карте и маршруту</a>
+  <div class="page">
+    <header class="topbar">
+      <h1 class="wordmark"><a href="/">NIGHTLINE</a><span>Ночная диспетчерская</span></h1>
+      <nav class="main-nav" aria-label="Инструменты диспетчера">
+        <button class="nav-button" id="focus-map" type="button"><svg class="icon" aria-hidden="true"><use href="#i-map"/></svg>Карта</button>
+        <button class="nav-button" id="open-notes" type="button"><svg class="icon" aria-hidden="true"><use href="#i-note"/></svg>Блокнот</button>
+        <button class="nav-button" id="open-rules" type="button"><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg>Правила</button>
+      </nav>
+      <div class="connection-info">
+        <span class="connection" id="connection" role="status"><span aria-hidden="true"></span><span id="connection-label">Подключение</span></span>
+        <span class="local-time"><time id="clock" aria-label="Время в Москве">··:··:··</time><span>МСК</span></span>
+      </div>
+    </header>
+    <main>
+      <section class="dispatch-brief" aria-labelledby="dispatch-title">
+        <h2 id="dispatch-title">Верни всех на склад</h2>
+        <p>Координаты курьеров потеряны. Отправь один маршрут из <b>R</b> и <b>B</b>, который приведёт на склад из любой точки города.</p>
+      </section>
+      <div class="global-notice" id="global-notice" role="alert" hidden>
+        <span id="global-notice-text"></span>
+        <button class="text-button" id="retry-session" type="button">Подключиться снова</button>
+      </div>
+      <div class="workspace" id="workspace" tabindex="-1">
+        <div class="map-column">
+          <section class="map-panel" id="map-card" aria-label="Карта города">
+            <header class="map-heading">
+              <h2 id="district">Загружаем карту…</h2>
+              <span class="map-id" id="map-id">Карта ещё не получена</span>
+            </header>
+            <div class="map-toolbar">
+              <div class="layer-switch" role="group" aria-label="Показать дороги">
+                <button class="active" data-layer="all" aria-pressed="true" type="button" disabled>Все дороги</button>
+                <button data-layer="red" aria-pressed="false" type="button" disabled><span class="color-dot red" aria-hidden="true"></span>Красные</button>
+                <button data-layer="blue" aria-pressed="false" type="button" disabled><span class="color-dot blue" aria-hidden="true"></span>Синие</button>
+              </div>
+              <div class="map-actions">
+                <button class="tool-button" id="toggle-pins" type="button" aria-pressed="false" aria-label="Включить пометки на карте" disabled><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg><span class="button-label">Пометки</span></button>
+                <a class="tool-button" id="download-map" href="#" aria-label="Скачать текущий слой карты в PNG" aria-disabled="true" tabindex="-1"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg><span class="button-label">PNG</span></a>
+                <button class="icon-button" id="fullscreen-map" type="button" title="Карта на весь экран" aria-label="Карта на весь экран"><svg class="icon" aria-hidden="true"><use href="#i-expand"/></svg></button>
+              </div>
+            </div>
+            <div class="map-stage" id="map-stage">
+              <canvas id="map-canvas" tabindex="0" role="img" aria-label="Карта направленных красных и синих дорог. Перемещение мышью или стрелками, масштаб колёсиком или кнопками. Полные правила — в разделе «Правила»."></canvas>
+              <div class="map-loading" id="map-loading" role="status"><span class="spinner" aria-hidden="true"></span><span id="map-loading-text">Загружаем карту</span><button class="secondary-button" id="retry-map" type="button" hidden>Попробовать снова</button></div>
+              <div class="map-hint" id="map-hint">Перетаскивай карту · Приближай колёсиком</div>
+              <div class="pin-hint" id="pin-hint" hidden>Нажми на карту, чтобы поставить или убрать пометку<button class="text-button" id="clear-pins" type="button">Убрать все</button></div>
+              <div class="zoom-controls" role="group" aria-label="Масштаб карты">
+                <button id="zoom-out" type="button" aria-label="Отдалить карту"><svg class="icon" aria-hidden="true"><use href="#i-minus"/></svg></button>
+                <output id="zoom-label" aria-label="Масштаб относительно размера всей карты">100%</output>
+                <button id="zoom-in" type="button" aria-label="Приблизить карту"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></button>
+                <button id="fit-map" type="button" aria-label="Показать всю карту" title="Показать всю карту"><svg class="icon" aria-hidden="true"><use href="#i-fit"/></svg></button>
+              </div>
+            </div>
+            <footer class="map-footer">
+              <div class="map-legend"><span><i class="road-sample red" aria-hidden="true"></i><b>R</b> — красная</span><span><i class="road-sample blue" aria-hidden="true"></i><b>B</b> — синяя</span></div>
+              <div class="map-summary"><span><span id="node-count">20</span> узлов</span><span class="home-label"><svg class="icon" aria-hidden="true"><use href="#i-home"/></svg>Склад <strong id="target-label">··</strong></span></div>
+            </footer>
+          </section>
+          <div class="map-note"><p>Курьер выполняет весь маршрут, даже если уже попал на склад.</p><button class="text-button" id="brief-rules" type="button">Как читать карту</button></div>
+        </div>
+        <aside class="control-column" aria-label="Маршрут и попытки">
+          <section class="route-panel" aria-labelledby="route-title">
+            <div class="panel-heading"><h2 id="route-title">Маршрут</h2><span class="mission-status" id="mission-pill" role="status">Ожидает отправки</span></div>
+            <div class="success-panel" id="success-panel" role="status" hidden>
+              <svg class="icon success-icon" aria-hidden="true"><use href="#i-check"/></svg>
+              <h3>Все на складе</h3>
+              <p>Маршрут сработал из каждой точки. Флаг можно сдавать.</p>
+              <div class="flag-box"><code id="flag-value"></code><button class="icon-button" id="copy-flag" type="button" aria-label="Скопировать флаг"><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg></button></div>
+              <span class="flag-caption" id="flag-caption">Флаг</span>
+            </div>
+            <form id="route-form" novalidate>
+              <div class="field-heading"><label for="route-input">Последовательность команд</label><span class="route-counter"><strong id="route-length">0</strong> / <span id="route-limit">128</span></span></div>
+              <textarea id="route-input" name="route" rows="5" spellcheck="false" autocapitalize="characters" autocomplete="off" aria-describedby="route-help route-error" placeholder="R B R R B…" maxlength="4096" disabled></textarea>
+              <div class="route-preview" id="route-preview" aria-hidden="true"><span class="preview-placeholder">R — красная дорога, B — синяя</span></div>
+              <p class="field-help" id="route-help">До <span id="command-limit">128</span> команд. Пробелы и переносы строк не считаются. Можно вставить готовую строку.</p>
+              <div class="route-buttons">
+                <button class="command-button red-command" id="append-red" type="button" aria-label="Добавить R: красная дорога" disabled><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>R</button>
+                <button class="command-button blue-command" id="append-blue" type="button" aria-label="Добавить B: синяя дорога" disabled><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>B</button>
+                <button class="icon-button editor-button" id="undo-route" type="button" title="Убрать последнюю команду" aria-label="Убрать последнюю команду" disabled><svg class="icon" aria-hidden="true"><use href="#i-undo"/></svg></button>
+                <button class="icon-button editor-button" id="clear-route" type="button" title="Очистить маршрут" aria-label="Очистить маршрут" disabled><svg class="icon" aria-hidden="true"><use href="#i-trash"/></svg></button>
+              </div>
+              <p class="route-error" id="route-error" role="status" hidden></p>
+              <button class="submit-button" id="submit-route" type="submit" disabled><span id="submit-label">Отправить маршрут</span></button>
+              <p class="submit-caption">Проверим все точки старта<span>Ctrl / Cmd + Enter</span></p>
+            </form>
+            <div class="result-message" id="result-message" role="status" hidden></div>
+          </section>
+          <section class="history-panel" aria-labelledby="history-title">
+            <header class="history-heading"><h2 id="history-title">Попытки</h2><span id="attempt-count">0 попыток</span></header>
+            <ol id="history-list"></ol>
+            <div class="history-empty" id="history-empty"><p>Пока нет отправленных маршрутов.</p><p>Результаты появятся здесь.</p></div>
+          </section>
+          <div class="city-actions"><button class="text-button new-city-button" id="open-new-city" type="button" disabled><svg class="icon" aria-hidden="true"><use href="#i-refresh"/></svg>Сменить город</button><p>Новая карта сбросит текущие попытки.</p></div>
+        </aside>
+      </div>
+    </main>
+    <footer class="page-footer"><span>Лаборатория X · Карантинный архив ALICE · HACKED</span><span>Любой результат считается результатом.</span></footer>
+  </div>
+  <dialog id="rules-dialog" aria-labelledby="rules-title">
+    <div class="dialog-heading"><h2 id="rules-title">Как читать карту</h2><button class="icon-button" type="button" data-close-dialog aria-label="Закрыть правила"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+    <p class="dialog-intro">NIGHTLINE — ночной диспетчерский тренажёр из карантинного архива ALICE. Перед тобой условный город, не план лаборатории. Начальные координаты курьеров неизвестны; общий канал уцелел.</p>
+    <div class="rule-command"><span class="command-token red">R</span><p>Проехать по <b>красной сплошной</b> дороге из текущего узла, следуя стрелке.</p></div>
+    <div class="rule-command"><span class="command-token blue">B</span><p>Проехать по <b>синей пунктирной</b> дороге из текущего узла, следуя стрелке.</p></div>
+    <ul class="rules-list">
+      <li>В каждом узле ровно один выезд каждого цвета. Одна команда — один переход, независимо от длины дороги.</li>
+      <li>Соединения существуют только в пронумерованных узлах. Пересечение линий вне узла не является перекрёстком.</li>
+      <li>Петля возвращает в тот же узел. Повторять узлы и дороги разрешено.</li>
+      <li>Склад отмечен зелёным. Он тоже может быть начальной точкой и тоже имеет выезды.</li>
+      <li>Курьер выполняет всю строку, даже если уже заехал на склад. На складе нужно оказаться <b>после последней команды</b>.</li>
+      <li>Одна и та же строка должна работать из <b>всех 20 узлов</b>. Максимум — 128 команд. Кратчайший маршрут искать необязательно.</li>
+    </ul>
+    <p class="dialog-tip">Карту можно приближать, разделять по цветам и скачивать. Блокнот, маршрут и пометки сохраняются в этом браузере. Сессия действует <span id="session-duration">48 часов</span>.</p>
+    <button class="secondary-button" type="button" data-close-dialog>Вернуться к карте</button>
+  </dialog>
+  <dialog id="notes-dialog" aria-labelledby="notes-title">
+    <div class="dialog-heading"><h2 id="notes-title">Блокнот</h2><button class="icon-button" type="button" data-close-dialog aria-label="Закрыть блокнот"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+    <p class="dialog-intro">Записывай переходы и промежуточные маршруты. Заметки сохраняются только в этом браузере.</p>
+    <label class="visually-hidden" for="notes-input">Заметки к текущей карте</label>
+    <textarea id="notes-input" rows="12" spellcheck="false" maxlength="12000" placeholder="01: R → …, B → …&#10;02: R → …, B → …"></textarea>
+    <div class="notes-footer"><span id="notes-status" role="status">Сохраняется автоматически</span><button class="secondary-button" type="button" data-close-dialog>Готово</button></div>
+  </dialog>
+  <dialog id="new-city-dialog" aria-labelledby="new-city-title">
+    <div class="dialog-heading"><h2 id="new-city-title">Сменить город?</h2><button class="icon-button" type="button" data-close-dialog aria-label="Отменить смену города"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+    <p class="dialog-intro">Текущая карта, попытки, маршрут, заметки и пометки будут заменены. Сохрани всё нужное перед сменой.</p>
+    <p class="dialog-wait" id="new-city-wait" hidden></p>
+    <div class="dialog-actions"><button class="secondary-button" type="button" data-close-dialog>Оставить эту карту</button><button class="submit-button" type="button" id="confirm-new-city">Сменить город</button></div>
+  </dialog>
+  <div class="toast" id="toast" role="status" hidden></div>
+  <noscript><div class="noscript-message">Для карты и отправки маршрута нужен JavaScript. Включи его и обнови страницу.</div></noscript>
+</body>
+</html>

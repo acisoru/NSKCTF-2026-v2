@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% set active = 'registry' %}
+
+{% block content %}
+<div class="page-head">
+    <h1>Реестр личного состава</h1>
+    <p class="subtitle">Действующие допуски</p>
+</div>
+
+<div class="card">
+    <h2>Допуски <span class="tag">{{ entries|length }}</span>
+        <a href="/registry/export?filename=registry.csv" class="muted" style="font-weight:400; font-size:0.85rem;">экспорт в CSV</a>
+    </h2>
+    <table class="data">
+        <thead>
+            <tr>
+                <th><a href="/registry?sort=clearance">Допуск</a></th>
+                <th><a href="/registry?sort=name">Имя</a></th>
+                <th><a href="/registry?sort=operator">Оператор</a></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entry in entries %}
+            <tr>
+                <td><span class="chip">{{ entry.clearance }}</span></td>
+                <td>{{ entry.name }}</td>
+                <td>{{ entry.operator }}</td>
+                <td><a href="/registry/entry?id={{ entry.id }}">открыть →</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

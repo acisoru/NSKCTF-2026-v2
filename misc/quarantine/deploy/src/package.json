@@ -1,0 +1,27 @@
+{
+  "name": "lab-x-quarantine",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "start": "node --env-file-if-exists=../deploy/.env server/index.mjs",
+    "dev": "npm run build && node --env-file-if-exists=../deploy/.env server/index.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "test:browser": "node tests/browser.mjs",
+    "test:models": "node tests/models-browser.mjs",
+    "test:recreate": "node tests/recreate-browser.mjs",
+    "test:admin-browser": "node tests/admin-browser.mjs",
+    "test:load": "node tests/load.mjs"
+  },
+  "dependencies": {
+    "cannon-es": "0.20.0",
+    "lucide": "^0.577.0",
+    "three": "^0.183.0",
+    "ws": "^8.19.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "playwright": "^1.58.2"
+  }
+}

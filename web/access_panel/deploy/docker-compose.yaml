@@ -1,0 +1,60 @@
+name: access-panel
+
+services:
+  access-panel-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 127.0.0.1:63333:57894
+    env_file:
+      - ./src/.env
+    depends_on:
+      access-panel-db:
+        condition: service_healthy
+    volumes:
+      - access_panel_archive:/var/lib/labx/archive:ro
+    restart: unless-stopped
+    mem_limit: 512mb
+    cpus: 0.5
+
+  access-panel-db:
+    image: postgres:17
+    env_file:
+      - ./src/.env.db
+    volumes:
+      - access_panel_pgdata:/var/lib/postgresql/data
+      - ./db-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U labx_panel_2018 -d LabXArchive"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    mem_limit: 1024mb
+    cpus: 1.0
+
+  access-panel-archive-init:
+    image: busybox:latest
+    env_file:
+      - ./src/.env.flag
+    command:
+      - sh
+      - -c
+      - |
+        mkdir -p /archive &&
+        printf '%s\n%s\n%s\n' \
+          'ЖУРНАЛ ОСНОВНОГО ДОПУСКА — ЛАБОРАТОРИЯ X' \
+          '2018-11-02 03:12 | допуск 000 | помещение: серверная | оператор: [———]' \
+          "FLAG=$$FLAG" > /archive/ledger.txt &&
+        chmod 444 /archive/ledger.txt
+    volumes:
+      - access_panel_archive:/archive
+    restart: "no"
+    mem_limit: 64mb
+    cpus: 0.1
+
+volumes:
+  access_panel_pgdata:
+  access_panel_archive:

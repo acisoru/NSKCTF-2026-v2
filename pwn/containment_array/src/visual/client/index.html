@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#101819" />
+  <meta name="description" content="Карантинный контур ALICE · Лаборатория X" />
+  <title>Контур памяти · Лаборатория X</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-symbol" aria-hidden="true">LX</span><div><strong>Контур памяти</strong><span>Лаборатория X · Карантин ALICE</span></div></div>
+      <div class="service-address">Нативный сервис <code id="native-address">:34120</code></div>
+    </header>
+
+    <main class="workspace">
+      <section class="process-panel" aria-labelledby="vessel-title">
+        <div class="panel-heading"><div><h1 id="vessel-title">Изолированная установка</h1><p>Установлено 8 датчиков · Контроллер адресует 32 канала</p></div><button id="view-reset" class="secondary-button" type="button">Сбросить обзор</button></div>
+        <div class="visual-stage" aria-label="Интерактивная 3D-модель карантинной установки">
+          <canvas id="scene-canvas" aria-label="Установка и восемь датчиков"></canvas>
+          <div class="model-caption"><span id="selected-sensor">Датчик не выбран</span><span>Перетаскивание — поворот · Колесо — масштаб</span></div>
+          <div class="scene-fallback" id="scene-fallback" hidden><strong>3D-модель недоступна</strong><p>Таблица датчиков и терминал продолжают работать.</p></div>
+        </div>
+        <section class="probe-panel" aria-labelledby="probe-title">
+          <div class="probe-heading"><h2 id="probe-title">Установленные датчики</h2><span>Показания поступают от нативного контроллера</span></div>
+          <div class="probe-table-scroll"><table class="probe-table"><thead><tr><th>Канал</th><th>Датчик</th><th>Последнее значение</th><th>Действие</th></tr></thead><tbody id="sensor-list"></tbody></table></div>
+        </section>
+      </section>
+
+      <aside class="console" aria-label="Терминал нативного протокола">
+        <div class="console-heading"><div><h2>Контроллер установки</h2><p>Отдельный процесс · TCP 34120</p></div><span id="connection-status" role="status">Подключение</span></div>
+        <div class="session-actions"><button id="reconnect" class="text-button" type="button">Переподключить</button><button id="clear-output" class="text-button" type="button">Очистить вывод</button></div>
+        <div class="terminal-wrap"><div class="terminal-head">Вывод сеанса</div><pre id="terminal-output" aria-live="polite"></pre></div>
+        <form id="command-form" class="command-form"><label for="command-input">Команда</label><div class="command-row"><input id="command-input" type="text" autocomplete="off" spellcheck="false" placeholder="VIEW 8" /><button class="primary-button" type="submit">Отправить</button></div></form>
+        <div class="controller-grid">
+          <div class="controller-block"><label for="channel-index">Чтение канала</label><div class="control-row"><input id="channel-index" type="number" min="0" max="31" value="8" /><button id="send-view" class="secondary-button" type="button">Читать</button></div></div>
+          <div class="controller-block"><label for="cal-length">Калибровочный кадр</label><div class="control-row"><input id="cal-length" type="number" min="1" max="512" value="128" /><button id="prepare-cal" class="secondary-button" type="button">Подготовить</button></div></div>
+        </div>
+        <div class="frame-controls"><button id="open-hex" class="text-button" type="button">Байты кадра</button><span id="frame-status" role="status">Нет ожидающего кадра</span></div>
+        <form id="hex-form" class="hex-form" hidden><label for="hex-input">Байты кадра в шестнадцатеричном виде</label><textarea id="hex-input" spellcheck="false" placeholder="41414141..."></textarea><button class="secondary-button" type="submit">Передать байты</button></form>
+        <div class="downloads"><h3>Файлы задания</h3><a href="/downloads/chamber" download>chamber</a><a href="/downloads/libc.so.6" download>libc.so.6</a><a href="/downloads/ld-linux-x86-64.so.2" download>ld-linux</a></div>
+      </aside>
+    </main>
+
+    <footer class="statusbar"><span>ALICE · Режим наблюдения</span><span>Прямое подключение: <code id="direct-command">nc host 34120</code></span></footer>
+  </div>
+  <script type="module" src="/scene.js"></script>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+services:
+  c2-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      C2_BIND: 0.0.0.0
+      C2_PORT: "9443"
+      C2_MATERIAL: /shared
+      C2_FILE_STORE: /store
+      C2_FLAG: ${C2_FLAG:-nskctf{3xf1ltr4t10n_un1u(K}}
+    ports:
+      - "9443:9443"
+    mem_limit: 256m
+    cpus: "0.5"
+    volumes:
+      - ./c2-material:/shared:ro
+      - c2-store:/store
+
+volumes:
+  c2-store:

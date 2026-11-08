@@ -1,0 +1,18 @@
+3D-модели и текстуры Poly Haven, лицензия CC0:
+  https://polyhaven.com/a/barrel_03
+  https://polyhaven.com/a/portable_generator
+  https://polyhaven.com/a/industrial_storage_cart
+  https://polyhaven.com/a/worn_metal_rack
+  https://polyhaven.com/a/portable_searchlight
+  https://polyhaven.com/a/caged_hanging_light
+  https://polyhaven.com/a/concrete_floor
+  https://polyhaven.com/a/metal_plate
+  https://polyhaven.com/license
+
+Текстуры моделей преобразованы из JPEG в PNG для совместимости с raylib.
+Текстуры пола и стен уменьшены до 512 пикселей и тонированы для игры.
+Варианты для облегчённой графики собраны из тех же изображений.
+Шейдеры освещения и теней, обработка изображения, процедурные конструкции,
+анимации, персонажи и интерфейс созданы для этого задания.
+
+DejaVu Sans Mono распространяется на условиях исходной лицензии в FONT-LICENSE.txt.

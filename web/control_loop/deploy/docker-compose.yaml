@@ -1,0 +1,39 @@
+name: control-loop
+
+services:
+  control-loop-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 127.0.0.1:63401:8080
+    env_file:
+      - ./src/public/.env
+    depends_on:
+      control-loop-db:
+        condition: service_healthy
+    sysctls:
+      - net.ipv4.ip_unprivileged_port_start=0
+    restart: unless-stopped
+    mem_limit: 512mb
+    cpus: 0.5
+
+  control-loop-db:
+    image: postgres:17
+    env_file:
+      - ./src/.env.db
+    volumes:
+      - control_loop_pgdata:/var/lib/postgresql/data
+      - ./db-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U control_loop_app -d LabXControl"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    mem_limit: 1024mb
+    cpus: 1.0
+
+volumes:
+  control_loop_pgdata:

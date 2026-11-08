@@ -1,0 +1,160 @@
+{
+  "curve": "secp256k1",
+  "digest": "SHA-256",
+  "context": "Подписанные строки журнала ALICE из карантинного архива Лаборатории X",
+  "nonce_reservoir_bits": 232,
+  "public_key": {
+    "x": "b9fb0945ec8e79c1bf1ee587c8d1ec0387edcf84870f2685e4c8a7cc52697981",
+    "y": "9f2408f3f337028935c740403df1a31b743862c4b1dea11163f0aebf58b2f345"
+  },
+  "records": [
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-00",
+      "r": "0d207b8bd59e523b74a4ba31368581980681bce1eca49d2748a2f32725be7d75",
+      "s": "3cade92324bbf642512977faaf44862eeccd10d5b59ef444b40dba75f5b4f781"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-01",
+      "r": "c19488172659f494ce567224f0d051f2f9254d6471cdbce96f67d31bedfd0c8d",
+      "s": "0202c4c9c692de7fc024e7b7dacc1cb6a3c4f921d06e7239063fc2f6356d92f8"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-02",
+      "r": "3109880e83046fc9e7ee3f78c6669d239314596cb1a471ff459b48ee42519114",
+      "s": "eb57f9692f98da69c3cc5299193d7cff8dfdccbc4ef7e6da94d7be33f9356e20"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-03",
+      "r": "0a710fbeea2b801c03b52bd8cfaae0c7a418a4124dbec28beb1932dc3b9fee77",
+      "s": "6a7ade7c6c969781e55db2d6dc9e0f8d57c2d3722cd01abeba4142deee04da5b"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-04",
+      "r": "ff9b449c5fa527e524cd3ee880c155ee8524d119d563627c22911c673a6a3fbe",
+      "s": "ab3f4bf1515325a22982d3877a8e85b5b0acb47f04d2fc77260f86d26129f47a"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-05",
+      "r": "e2c608d8d9d4f1d6c375d50ede3fcd9efd1d711351f3197552d56d053b3a43e3",
+      "s": "ff63ae6c6206582e61801837b82e93525fd253856bcd8d736a981257e8728745"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-06",
+      "r": "5ad02f869d90d9439f1afcfa995df49a0865a6c65ac04b9e5e71f63111d71350",
+      "s": "aab8a121847e85c2775f3906b9750e0e56089c9a233129ff2525dca017702b69"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-07",
+      "r": "310f89d49d774d3ceb038fdcf6bd20b8f0e1233cc90d480501e08587959856c1",
+      "s": "693383a92a9352986d16ead1cc21bbdfbf576d2fd9e4a654be2f570c29fbe376"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-08",
+      "r": "571fb5042d68e7aa03a48abb22060ea27a6a001e0162efcbabf489b498ebf87d",
+      "s": "ac90ab56a1418b1156a06758f348d3e1a15ad12942dc0cc7b97e2dafea3cd6ad"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-09",
+      "r": "2ca73bc568e08215e2e3512d9072730b55183b7d00e4bbddb9bf83ffb207fe14",
+      "s": "937220d7fade88151fb6435f7339bf3fbff70a1892055922a26d8406f34e0b7e"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-10",
+      "r": "c19265ee7cf23596e360530f14bd9d978d9b0ffde92017bdc7d7be49dc2a2656",
+      "s": "f24aa59794362497e0b5a0a21b347b4d81682ad6e85dfcf7583773b275d1c79f"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-11",
+      "r": "6da6c5ef1a013840726b14c05ed668ecdaae3193f5c21000045a7316e5687a57",
+      "s": "c60ac6bafbd5c09f63b04de896ccd9c51bc2658705026442acb7ea1ce9698abe"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-12",
+      "r": "eb4e1e77433c815b53f866882f65887af3860b90b39fae8fbade65086d0964af",
+      "s": "ac5c956fbf2387b68ac700d95fd8940d3ae2328f768754565d4ba3de4db58c64"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-13",
+      "r": "c474e2102277a62c950cfe14f781227236b32a8b08457b80a8b8e378de9e8652",
+      "s": "3024aafeac3d7d599290cd27d949fd1a7eb876e2ad7bed4750ffa142443be805"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-14",
+      "r": "3ef63a66825e9cf355dcda1ee551525b04feb42363bd60c3e85872c14e476016",
+      "s": "a3c5cdb27e59f1abdf90fc6d9227759b29c14eed0f2c5036560485bfd00fbd0e"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-15",
+      "r": "d4f7d069fb03394e239804f137635dfd8d60b0b3b2aa571c67028d6f4a0bb05c",
+      "s": "18eff777c2b319e4a77f23b561ed22ef785b086ce60d80637eca27177fdf45a4"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-16",
+      "r": "8474ff823a00ef4f9b9515a552c69f89ed6db96f8cf665d2a98ed24ca9ec5b9e",
+      "s": "23484ef3fc46d7878f927510f22d2e9faf3372f89b51d93c86de99b2596ecb64"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-17",
+      "r": "9401924cbc4f9114e46e44c1e32e3707c48e6c832f3c2d84d28c997c1b81a865",
+      "s": "598d01c67e49846589f9f25e799b184703ae13fc57f1194261630b1d35e31cb1"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-18",
+      "r": "96a861dc09401753a1cfbeeccff6ecddb61b5358b8c48b4d7ef4a3b32e4a9e78",
+      "s": "fcbd6229afd5970037b60e4dcee6ec33e5e875825386ec8878f28494d52ab524"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-19",
+      "r": "1a31d7bf8be78716f3b4dc8662f4175c1406e42e81072ce1e98f835ddfef24ae",
+      "s": "3d5861eb55188a3edce2c79ed32aae746ce6e3fef08ea595c00ee8b068152201"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-20",
+      "r": "08e1f6b506bad637bd0cb5888539365586fb515f0ca823a478d1b1efc9192001",
+      "s": "b29044285358afd309a6050e1cbc8400ead0b9aad73fa3d74c3a5195c17edbca"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-21",
+      "r": "d33feaa3f4d2854c9a3dab6927543802f66f5964b4293fa39b4ca10a2bba7d42",
+      "s": "8560963673c73d9355abea07a1826192c490135d47a55ae52a383c3cd6ef834d"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-22",
+      "r": "d4686b815f054ee3e715bda1c7c750330048341b42047ef1d89e6788430ac4ed",
+      "s": "ffd53857399913fcdba4060977d22df5f10d5ee34b37fa3588f45c66a820faf8"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-23",
+      "r": "2d6449a321bc9eebe782b03fa5da32a3081767b4ff541029515a1d7514fafa29",
+      "s": "c2714ea72d7ef0a18e6d62e74acd88240d04ef6797717f287c183e97713d22fa"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-24",
+      "r": "c024947307ccd6c9764e60d3f4a4b77a74d1f579b7e1eea0c514dce0aaea6fd6",
+      "s": "59707f940155fbebe5bf4acc1713c5f3445000c6f8bad2c91d2184b461892b85"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-25",
+      "r": "ba6a6fc163910825754b04d57e0cdb41996f13e719977991fcefb8377b4983cb",
+      "s": "77aac7b5a1da5f607d27270b497899cac6efcbef425e1d4f8d3dbf99a7de1390"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-26",
+      "r": "8ee2da4ef07186bf20e4a51be7bd1fbe999367700674f7bc72de4c537ae3ef6f",
+      "s": "58d20c1f817da816ea21e6fed0416ccad7a81d51bb025fc1931ac9bfa403b9ac"
+    },
+    {
+      "message": "ALICE/КАРАНТИН/ЗАПИСЬ-27",
+      "r": "20e4f5a59fc385fe15b17b856461816bfe9bdb77b9e0241528a3fd552fd17044",
+      "s": "39ba7b4dd01785054f097add71ff7e00a07d004d68751e3e856ce53798dd0251"
+    }
+  ],
+  "release": {
+    "algorithm": "AES-256-GCM",
+    "kdf": "SHA256(domain || d.to_bytes(32, 'big'))",
+    "domain_hex": "d09bd090d0912d582f414c4943452fd096d0a3d0a0d09dd090d09b2fd09ad09bd0aed0a700",
+    "iv": "9c7d80bb6b0859aa251b4287",
+    "ciphertext": "c9938a2666667086745045e0b59df07490e311ee6fd4515accc9359261f337716d57ec7c2a5b3f9b3f25c8d38cc6fce8c5706e0edee6253172074ac895acbf1192e765431c2d369157816596329f2acd9b22763ff22339aa48599ab8a044524395dd00dc738e1434c1dcb3960c74429a715aa4f95248b75b26fa3ee0e35e04a64bbc8bad9f62c95fdd18547681f976f5b9b36f7911394c",
+    "tag": "1fa78d72963c0f6d24f9d4faf8065155"
+  }
+}

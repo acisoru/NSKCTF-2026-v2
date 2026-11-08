@@ -1,0 +1,16 @@
+services:
+  dont_press_web:
+    build: .
+    restart: unless-stopped
+    environment:
+      FLAG: "nskctf{i_said_careful}"
+    ports:
+      - "127.0.0.1:63391:8000"
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 64m
+    cpus: 0.25
+    pids_limit: 128

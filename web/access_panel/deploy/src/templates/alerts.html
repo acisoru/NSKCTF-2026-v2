@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page">
+    <div class="crt-header">
+        <div class="crt-title">&gt; ОПОВЕЩЕНИЯ ОТДЕЛЕНИЯ<span class="cursor">_</span></div>
+        <div class="crt-subtitle">внутренние уведомления · архив 2018 года</div>
+    </div>
+
+    <div class="grid">
+        <section class="card card-wide">
+            <h2>Лента оповещений</h2>
+            <div class="alert-list">
+                <div class="alert-item">
+                    <div class="alert-date">13.11.2018</div>
+                    <h3>Обновление панели допуска</h3>
+                    <p>В журнал выдачи карт добавлена сортировка по клику на заголовок колонки.
+                    Старая постраничная выгрузка отключена.</p>
+                </div>
+                <div class="alert-item">
+                    <div class="alert-date">02.11.2018</div>
+                    <h3>Выдан резервный допуск</h3>
+                    <p>Зарегистрирован допуск 000 как резервный. В оборот не вводился,
+                    оператор не назначен.</p>
+                </div>
+                <div class="alert-item alert-note">
+                    <div class="alert-date">28.10.2018</div>
+                    <h3>Плановая замена паролей перенесена</h3>
+                    <p>Смена паролей учётных записей отложена до следующего обслуживания.
+                    На ночную смену правило временно не распространяется.</p>
+                </div>
+                <div class="alert-item">
+                    <div class="alert-date">14.10.2018</div>
+                    <h3>Передача дежурства</h3>
+                    <p>Дневная смена (dr. Demon, mr. Fade, mr. S) передала дежурство.
+                    Замечаний по журналу нет.</p>
+                </div>
+                <div class="alert-item alert-note">
+                    <div class="alert-date">02.08.2018</div>
+                    <h3>Экспорт протокола</h3>
+                    <p>Для ночной смены включён отдельный пункт «Экспорт протокола» —
+                    выгрузка журналов из каталога протоколов без обращения к архивариусу.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

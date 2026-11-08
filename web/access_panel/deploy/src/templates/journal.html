@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page">
+    <div class="crt-header">
+        <div class="crt-title">&gt; ЖУРНАЛ ВЫДАЧИ КАРТ<span class="cursor">_</span></div>
+        <div class="crt-subtitle">учёт входов по помещениям · архив 2018 года</div>
+    </div>
+
+    <div class="grid">
+        <section class="card card-wide">
+            <h2>Журнал выдачи карт</h2>
+            <p class="hint">нажмите на заголовок колонки для сортировки</p>
+            <div class="table-scroll">
+                <table class="data-table sortable" id="accessLog">
+                    <thead>
+                        <tr>
+                            <th data-sort="log_date" class="sortable-col">Дата</th>
+                            <th data-sort="username" class="sortable-col">Имя</th>
+                            <th data-sort="room" class="sortable-col">Помещение</th>
+                            <th data-sort="device" class="sortable-col">Считыватель</th>
+                            <th data-sort="status" class="sortable-col">Статус</th>
+                        </tr>
+                    </thead>
+                    <tbody id="accessLogBody">
+                        {% for row in log_rows %}
+                        <tr>
+                            <td>{{ row.log_date }}</td>
+                            <td>{{ row.username }}</td>
+                            <td>{{ row.room }}</td>
+                            <td>{{ row.device }}</td>
+                            <td>{{ row.status }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</div>
+<script>
+    const ALLOWED_SORTS = ["log_date", "username", "room", "device", "status"];
+
+    document.querySelectorAll("#accessLog th.sortable-col").forEach((header) => {
+        header.addEventListener("click", async () => {
+            const sort = header.dataset.sort;
+            if (!ALLOWED_SORTS.includes(sort)) return;
+
+            const response = await fetch("/archive/access-log", {
+                method: "POST",
+                headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                body: "sort=" + encodeURIComponent(sort),
+            });
+            const data = await response.json();
+
+            const tbody = document.getElementById("accessLogBody");
+            tbody.innerHTML = "";
+            for (const row of data.rows) {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `<td>${row.log_date}</td><td>${row.username}</td><td>${row.room}</td><td>${row.device}</td><td>${row.status}</td>`;
+                tbody.appendChild(tr);
+            }
+
+            document.querySelectorAll("#accessLog th").forEach((th) => th.classList.remove("sorted"));
+            header.classList.add("sorted");
+        });
+    });
+</script>
+{% endblock %}

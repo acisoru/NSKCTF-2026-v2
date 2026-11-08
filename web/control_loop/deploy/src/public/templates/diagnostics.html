@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% set active = 'diagnostics' %}
+
+{% block content %}
+<div class="page-head">
+    <h1>Диагностика узла</h1>
+    <p class="subtitle">Показания датчиков терминала</p>
+</div>
+
+<div class="card">
+    <h2>Датчики <span class="tag">обновлено сейчас</span></h2>
+    <table class="data">
+        <thead><tr><th>Канал</th><th>Датчик</th><th>Значение</th><th>Состояние</th></tr></thead>
+        <tbody>
+        {% for s in sensors %}
+            <tr>
+                <td class="muted">{{ s.code }}</td>
+                <td>{{ s.name }}</td>
+                <td>{{ s.value }}</td>
+                <td>
+                    {% if s.ok %}<span class="badge badge-ok">норма</span>
+                    {% else %}<span class="badge badge-wait">внимание</span>{% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="card">
+    <h2>Самопроверка</h2>
+    <p class="muted">Полный прогон датчиков узла по запросу.</p>
+    <div style="margin-top:1rem; display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+        <button class="btn btn-ghost" type="button" id="selftestBtn">Запустить самопроверку</button>
+        <span class="result-line" id="selftestMeta">
+            {% if last_selftest %}последний прогон: <b>{{ last_selftest }}</b> · всего: <b>{{ selftest_count }}</b>{% else %}самопроверка ещё не запускалась{% endif %}
+        </span>
+    </div>
+    <div class="inline-note" id="selftestResult"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var btn = document.getElementById("selftestBtn");
+    var meta = document.getElementById("selftestMeta");
+    var result = document.getElementById("selftestResult");
+
+    btn.addEventListener("click", async function () {
+        btn.disabled = true;
+        result.className = "inline-note show";
+        result.textContent = "Прогон датчиков…";
+        try {
+            var r = await fetch("/diagnostics/selftest");
+            var d = await r.json();
+            result.textContent = "✓ " + d.message;
+            meta.innerHTML = "последний прогон: <b>" + d.ran_at + "</b> · всего: <b>" + d.selftest_count + "</b>";
+        } catch (err) {
+            result.textContent = "Датчики не отвечают.";
+        } finally {
+            btn.disabled = false;
+        }
+    });
+</script>
+{% endblock %}

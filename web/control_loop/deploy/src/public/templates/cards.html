@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% set active = 'cards' %}
+
+{% block content %}
+<div class="page-head">
+    <h1>Карточки аномалий</h1>
+    <p class="subtitle">Учётная запись: {{ user }}</p>
+</div>
+
+<div class="cols">
+    <div class="card">
+        <h2>Поиск по карточкам</h2>
+        <form method="get" action="/cards" class="form">
+            <label>Фильтр<input type="text" name="filter" value="{{ filter_query or '' }}" placeholder="например: частота OR отклонение"></label>
+            <button class="btn btn-ghost" type="submit">Найти</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Статистика</h2>
+        <div class="stat-row">
+            <div class="stat"><div class="num">{{ cards|length }}</div><div class="lbl">ваших карточек</div></div>
+            <div class="stat"><div class="num">847</div><div class="lbl">аномалий в архиве</div></div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Новая карточка</h2>
+    {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+    <form method="post" action="/cards/create" class="form" id="cardForm">
+        <label>Описание<textarea name="description" id="cardDescription" rows="4" maxlength="1024" placeholder="опишите аномалию…"></textarea></label>
+        <div class="inline-note" id="linkPreviewBox"><pre class="preview" id="linkPreviewBody"></pre></div>
+        <button class="btn" type="submit">Создать карточку</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2>Мои карточки <span class="tag">{{ cards|length }}</span></h2>
+    {% if not cards %}
+    <div class="empty">Пока нет ни одной карточки. Образец: «аномалия №612, пультовая, отклонение частоты».</div>
+    {% else %}
+    <div class="list-stack">
+    {% for card in cards %}
+        <article class="anomaly">
+            <div class="meta">
+                <span>#{{ card.id }} · аномалия №{{ card.anomaly_number }}</span>
+                <span>{{ card.log_date }}</span>
+            </div>
+            <div>{{ card.description }}</div>
+            {% if card.preview %}<pre class="preview">{{ card.preview }}</pre>{% endif %}
+        </article>
+    {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var textarea = document.getElementById("cardDescription");
+    var box = document.getElementById("linkPreviewBox");
+    var body = document.getElementById("linkPreviewBody");
+    var urlPattern = /https?:\/\/\S+/;
+    var timer = null;
+
+    textarea.addEventListener("input", function () {
+        clearTimeout(timer);
+        var match = textarea.value.match(urlPattern);
+        if (!match) {
+            box.className = "inline-note";
+            return;
+        }
+        timer = setTimeout(async function () {
+            try {
+                var r = await fetch("/cards/preview?source_url=" + encodeURIComponent(match[0]));
+                var d = await r.json();
+                box.className = "inline-note show";
+                body.textContent = d.error ? ("[" + r.status + "] " + d.error) : ("[" + d.status + "] " + d.preview);
+            } catch (err) {}
+        }, 600);
+    });
+</script>
+{% endblock %}

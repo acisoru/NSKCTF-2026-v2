@@ -1,0 +1,28 @@
+{
+  "name": "labx-network-operations",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "start": "node --env-file-if-exists=../deploy/.env server/index.mjs",
+    "dev": "npm run build && npm start",
+    "test": "node --test tests/*.test.mjs",
+    "test:browser": "node tests/browser.mjs",
+    "test:camera": "node tests/camera-browser.mjs",
+    "test:bench": "node tests/bench-browser.mjs",
+    "test:incidents": "node tests/incidents-browser.mjs",
+    "test:checker": "node tests/checker.mjs",
+    "test:load": "node tests/load.mjs"
+  },
+  "dependencies": {
+    "cannon-es": "0.20.0",
+    "lucide": "^0.577.0",
+    "pathfinding": "0.4.18",
+    "three": "^0.183.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "playwright": "^1.58.2"
+  }
+}

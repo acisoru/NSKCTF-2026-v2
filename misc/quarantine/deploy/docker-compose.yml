@@ -1,0 +1,28 @@
+services:
+  quarantine_rpg:
+    build:
+      context: ./src
+      dockerfile: ../Dockerfile
+    pull_policy: build
+    restart: unless-stopped
+    init: true
+    environment:
+      FLAG: "${FLAG:?Set FLAG in deploy/.env before deployment}"
+      MAX_PLAYERS: "300"
+      PUBLIC_ORIGIN: "${PUBLIC_ORIGIN:-http://localhost:3387}"
+      YANDEX_CLIENT_ID: "${YANDEX_CLIENT_ID:-}"
+      YANDEX_CLIENT_SECRET: "${YANDEX_CLIENT_SECRET:-}"
+      ADMIN_YANDEX_IDS: "${ADMIN_YANDEX_IDS:-}"
+    ports:
+      - "127.0.0.1:3387:3387"
+    mem_limit: 8g
+    cpus: 4.0
+    read_only: true
+    volumes:
+      - quarantine_progress:/app/data
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+volumes:
+  quarantine_progress:

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% set active = 'registry' %}
+
+{% block content %}
+<div class="page-head">
+    <h1>Запись реестра</h1>
+    <p class="subtitle">Допуск {{ entry.clearance }}</p>
+</div>
+
+<div class="card">
+    <h2>Карточка допуска <span class="tag">{{ entry.clearance }}</span></h2>
+    <dl class="kv">
+        <dt>Имя</dt><dd>{{ entry.name }}</dd>
+        <dt>Оператор</dt><dd>{{ entry.operator }}</dd>
+    </dl>
+    <pre class="preview">{{ entry.note }}</pre>
+</div>
+
+<p style="margin-top:1rem;"><a href="/registry">← к реестру</a></p>
+{% endblock %}

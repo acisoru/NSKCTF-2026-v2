@@ -1,0 +1,18 @@
+name: labx-network-worker
+services:
+  network_worker:
+    build:
+      context: ./src
+      dockerfile: ../Dockerfile
+      target: checker
+    pull_policy: build
+    restart: unless-stopped
+    init: true
+    privileged: true
+    environment:
+      CHECKER_TOKEN: "${CHECKER_TOKEN:?Set the same random token on app and workers}"
+    ports:
+      - "${CHECKER_BIND:-127.0.0.1}:${CHECKER_PORT:-9134}:9134"
+    tmpfs: [/run, /tmp]
+    cpus: "${CHECKER_CPUS:-2.0}"
+    mem_limit: "${CHECKER_MEMORY:-3g}"

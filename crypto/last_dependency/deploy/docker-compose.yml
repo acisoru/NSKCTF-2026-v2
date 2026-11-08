@@ -1,0 +1,22 @@
+name: nskctf-last-dependency
+
+services:
+  nsk_crypto_last_dependency:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "34212:34212"
+    environment:
+      FLAG: "nskctf{the_last_relation_closes_the_cycle}"
+      LEDGER_SIZE: "6144"
+      SOLVE_SECONDS: "888"
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 128
+    mem_limit: 512m
+    cpus: 2.0

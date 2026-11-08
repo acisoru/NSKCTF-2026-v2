@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% set active = 'support' %}
+
+{% block content %}
+<div class="page-head">
+    <h1>Поддержка</h1>
+    <p class="subtitle">Обращения в дежурную смену</p>
+</div>
+
+{% if not user %}
+<div class="card">
+    <div class="alert alert-error" style="margin-bottom:0;">Войдите, чтобы отправлять обращения и отслеживать их статус. <a href="/login">Вход</a></div>
+</div>
+{% else %}
+<div class="cols">
+    <div class="card">
+        <h2>Новое обращение</h2>
+        <div class="inline-note" id="sendResult"></div>
+        <form id="supportForm" class="form">
+            <label>Тема
+                <select name="topic" required>
+                    <option value="login">проблема со входом</option>
+                    <option value="cards">карточки аномалий</option>
+                    <option value="telemetry">телеметрия узла</option>
+                    <option value="other">другое</option>
+                </select>
+            </label>
+            <label>Сообщение<textarea name="message" rows="4" required placeholder="опишите, что случилось…"></textarea></label>
+            <button class="btn" type="submit" id="supportSubmit">Отправить обращение</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Как это работает</h2>
+        <dl class="kv">
+            <dt>Канал</dt><dd>открыт</dd>
+            <dt>Дежурный</dt><dd>ночная смена</dd>
+            <dt>Среднее время</dt><dd>~18 минут</dd>
+        </dl>
+        <p class="muted" style="margin-top:1rem;">Статус обращения обновляется дежурной сменой и сохраняется в вашем журнале.</p>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Мои обращения <span class="tag">{{ tickets|length }}</span></h2>
+    <table class="data" id="ticketTable">
+        <thead><tr><th>Код</th><th>Тема</th><th>Создано</th><th>Статус</th></tr></thead>
+        <tbody id="ticketBody">
+        {% for t in tickets %}
+            <tr>
+                <td><span class="chip">{{ t.code }}</span></td>
+                <td>{{ topic_labels.get(t.topic, t.topic) }}</td>
+                <td class="muted">{{ t.created_at }}</td>
+                <td><span class="badge badge-wait">{{ t.status }}</span></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if not tickets %}
+    <div class="empty" id="ticketEmpty">Обращений пока нет.</div>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{% if user %}
+<script>
+    var TOPIC_LABELS = {
+        login: "проблема со входом",
+        cards: "карточки аномалий",
+        telemetry: "телеметрия узла",
+        other: "другое"
+    };
+    var form = document.getElementById("supportForm");
+    var result = document.getElementById("sendResult");
+    var submit = document.getElementById("supportSubmit");
+    var body = document.getElementById("ticketBody");
+
+    form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        submit.disabled = true;
+        result.className = "inline-note";
+        var fd = new FormData(form);
+        try {
+            var r = await fetch("/support/send", { method: "POST", body: fd });
+            var d = await r.json();
+            if (!r.ok) {
+                result.className = "inline-note show";
+                result.textContent = d.detail || "Не удалось отправить обращение.";
+                return;
+            }
+            result.className = "inline-note show";
+            result.textContent = "✓ " + d.message;
+            var empty = document.getElementById("ticketEmpty");
+            if (empty) empty.remove();
+            var tr = document.createElement("tr");
+            tr.innerHTML = '<td><span class="chip">' + d.code + '</span></td>'
+                + '<td>' + (TOPIC_LABELS[fd.get("topic")] || fd.get("topic")) + '</td>'
+                + '<td class="muted">только что</td>'
+                + '<td><span class="badge badge-wait">' + d.status + '</span></td>';
+            body.insertBefore(tr, body.firstChild);
+            form.reset();
+        } catch (err) {
+            result.className = "inline-note show";
+            result.textContent = "Не удалось связаться с сервером.";
+        } finally {
+            submit.disabled = false;
+        }
+    });
+</script>
+{% endif %}
+{% endblock %}

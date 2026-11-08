@@ -1,0 +1,11 @@
+services:
+  privet_builder:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    restart: "no"
+    network_mode: none
+    mem_limit: 512m
+    cpus: 1.0
+    volumes:
+      - ../public:/output

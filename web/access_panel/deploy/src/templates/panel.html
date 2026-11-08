@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page">
+    <div class="crt-header">
+        <div class="crt-title">&gt; ПАНЕЛЬ ОПЕРАТОРА<span class="cursor">_</span></div>
+        <div class="crt-subtitle">учётная запись: {{ user }}</div>
+    </div>
+
+    <div class="grid">
+        {% if is_operator %}
+        <section class="card">
+            <h2>Экспорт протокола</h2>
+            <p class="hint">выгрузка журналов из каталога протоколов</p>
+            <ul class="export-list">
+                <li><a href="/panel/export?file=export_2018.log">export_2018.log</a></li>
+            </ul>
+        </section>
+        <section class="card">
+            <h2>Примечание оператора</h2>
+            <p class="note">Пароль учётной записи не обновлялся с 2018 года. Резервная
+            копия протокола хранится в архиве, файл <code>ledger.txt</code>. Основной
+            журнал допуска редактированию не подлежит.</p>
+        </section>
+        <section class="card card-wide">
+            <h2>Отправка оповещений</h2>
+            <p class="hint">сообщение передаётся в очередь рассылки отделения</p>
+
+            <div class="support-form-status" id="alertStatus"></div>
+
+            <form id="alertForm" class="auth-form support-form">
+                <div class="form-group">
+                    <label for="alertTitle">Заголовок</label>
+                    <input type="text" id="alertTitle" name="title" required placeholder="например, плановое обслуживание">
+                </div>
+                <div class="form-group">
+                    <label for="alertBody">Текст оповещения</label>
+                    <textarea id="alertBody" name="body" rows="3" required placeholder="кому и о чём сообщить"></textarea>
+                </div>
+                <button type="submit" id="alertSubmit">Поставить в очередь</button>
+            </form>
+        </section>
+        {% else %}
+        <section class="card card-wide">
+            <h2>Доступ ограничен</h2>
+            <div class="error">Недостаточно допуска. Этот терминал предназначен только для ночной смены.</div>
+        </section>
+        {% endif %}
+    </div>
+</div>
+{% if is_operator %}
+<script>
+    const alertForm = document.getElementById("alertForm");
+    const alertStatus = document.getElementById("alertStatus");
+    const alertSubmit = document.getElementById("alertSubmit");
+
+    alertForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        alertSubmit.disabled = true;
+        alertSubmit.textContent = "Отправка...";
+        alertStatus.className = "support-form-status";
+        alertStatus.textContent = "";
+
+        try {
+            const response = await fetch("/panel/alerts/send", {
+                method: "POST",
+                body: new FormData(alertForm),
+            });
+            const data = await response.json();
+
+            alertStatus.className = "support-form-status show";
+            alertStatus.textContent = data.message;
+            alertForm.reset();
+        } catch (err) {
+            alertStatus.className = "support-form-status show";
+            alertStatus.textContent = "Не удалось связаться с сервером.";
+        } finally {
+            alertSubmit.disabled = false;
+            alertSubmit.textContent = "Поставить в очередь";
+        }
+    });
+</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% set active = 'changelog' %}
+
+{% block content %}
+<div class="page-head">
+    <h1>Журнал изменений</h1>
+    <p class="subtitle">История сборок публичного терминала</p>
+</div>
+
+<div class="card">
+    <h2>Обновления <span class="tag">v2018.11-r4</span></h2>
+    <p class="muted">Терминал периодически обращается к серверу обновлений Лаборатории.</p>
+    <div style="margin-top:1rem; display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+        <button class="btn btn-ghost" type="button" id="checkBtn">Проверить обновления</button>
+        <span class="result-line" id="checkMeta">
+            {% if last_check %}последняя проверка: <b>{{ last_check }}</b> · всего проверок: <b>{{ check_count }}</b>{% else %}проверка ещё не выполнялась{% endif %}
+        </span>
+    </div>
+    <div class="inline-note" id="checkResult"></div>
+</div>
+
+<div class="card">
+    <h2>История сборок</h2>
+    <table class="data">
+        <thead><tr><th>Версия</th><th>Дата</th><th>Изменения</th></tr></thead>
+        <tbody>
+            <tr><td><span class="chip">r4</span></td><td class="muted">14.11.2018</td><td>Превью источника в карточках, правки вёрстки</td></tr>
+            <tr><td><span class="chip">r3</span></td><td class="muted">02.11.2018</td><td>Реестр переведён на выдачу пропусков</td></tr>
+            <tr><td><span class="chip">r2</span></td><td class="muted">24.10.2018</td><td>Часть регламента вынесена на отдельный контур</td></tr>
+            <tr><td><span class="chip">r1</span></td><td class="muted">03.09.2018</td><td>Первая публичная сборка терминала</td></tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var btn = document.getElementById("checkBtn");
+    var meta = document.getElementById("checkMeta");
+    var result = document.getElementById("checkResult");
+
+    btn.addEventListener("click", async function () {
+        btn.disabled = true;
+        result.className = "inline-note show";
+        result.textContent = "Опрос сервера обновлений…";
+        try {
+            var r = await fetch("/changelog/check");
+            var d = await r.json();
+            result.textContent = d.up_to_date
+                ? "✓ " + d.message
+                : d.message;
+            meta.innerHTML = "последняя проверка: <b>" + d.checked_at + "</b> · всего проверок: <b>" + d.check_count + "</b>";
+        } catch (err) {
+            result.textContent = "Сервер обновлений недоступен.";
+        } finally {
+            btn.disabled = false;
+        }
+    });
+</script>
+{% endblock %}

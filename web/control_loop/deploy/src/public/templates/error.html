@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-head">
+    <h1>
+    {% if status_code in (401, 403) %}Доступ запрещён
+    {% elif status_code == 404 %}Не найдено
+    {% elif status_code == 400 %}Некорректный запрос
+    {% else %}Ошибка {{ status_code }}{% endif %}
+    </h1>
+    <p class="subtitle">Код ответа: {{ status_code }}</p>
+</div>
+
+<div class="card">
+    <div class="alert alert-error" style="margin-bottom:0;">{{ detail }}</div>
+    <p style="margin-top:1rem;"><a href="/">← на главную</a></p>
+</div>
+{% endblock %}

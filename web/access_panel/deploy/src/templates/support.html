@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page">
+    <div class="crt-header">
+        <div class="crt-title">&gt; ТЕХНИЧЕСКАЯ ПОДДЕРЖКА<span class="cursor">_</span></div>
+        <div class="crt-subtitle">внутренняя служба поддержки отделения</div>
+    </div>
+
+    <div class="grid">
+        <section class="card card-wide">
+            <h2>Контакты</h2>
+            <div class="support-grid">
+                <dl>
+                    <div>
+                        <dt>Почта отделения</dt>
+                        <dd>support@labx.internal</dd>
+                    </div>
+                    <div>
+                        <dt>Внутренний номер</dt>
+                        <dd>доб. 000</dd>
+                    </div>
+                    <div>
+                        <dt>Часы работы</dt>
+                        <dd>круглосуточно, ночная смена</dd>
+                    </div>
+                </dl>
+                <div>
+                    <p class="note">
+                        Обращения обрабатываются дежурной сменой в порядке
+                        поступления. Срочные случаи направляются на почту
+                        отделения.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="card card-wide">
+            <h2>Новое обращение</h2>
+            <p class="hint">обращение регистрируется в системе и передаётся дежурной смене</p>
+
+            <div class="support-form-status" id="supportStatus"></div>
+
+            <form id="supportForm" class="auth-form support-form">
+                <div class="support-form-row">
+                    <div class="form-group">
+                        <label for="topic">Тема</label>
+                        <select id="topic" name="topic" required>
+                            <option value="">выберите тему</option>
+                            <option value="login">проблема со входом</option>
+                            <option value="journal">журнал выдачи карт</option>
+                            <option value="hardware">оборудование / помещение</option>
+                            <option value="other">другое</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact">Обратная связь (необязательно)</label>
+                        <input type="text" id="contact" name="contact" placeholder="внутренний номер или почта">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="message">Сообщение</label>
+                    <textarea id="message" name="message" rows="4" required placeholder="опишите, что случилось..."></textarea>
+                </div>
+                <button type="submit" id="supportSubmit">Отправить заявку</button>
+            </form>
+        </section>
+
+        <section class="card card-wide">
+            <h2>Архив обращений</h2>
+            <p class="hint">последние зарегистрированные обращения</p>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>От кого</th>
+                        <th>Тема</th>
+                        <th>Статус</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2018-09-14</td>
+                        <td>mr. Fade</td>
+                        <td>Контуры в пультовой искрят при запуске</td>
+                        <td>закрыто</td>
+                    </tr>
+                    <tr>
+                        <td>2018-07-02</td>
+                        <td>dr. Demon</td>
+                        <td>Нужна новая колба для склада</td>
+                        <td>закрыто</td>
+                    </tr>
+                    <tr>
+                        <td>2018-05-20</td>
+                        <td>mr. S</td>
+                        <td>Проверить аварийный протокол серверной</td>
+                        <td>закрыто</td>
+                    </tr>
+                    <tr>
+                        <td>2018-03-29</td>
+                        <td>mr. S</td>
+                        <td>Считыватель RDR-02 иногда не реагирует с первого раза</td>
+                        <td>отложено</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</div>
+<script>
+    const supportForm = document.getElementById("supportForm");
+    const supportStatus = document.getElementById("supportStatus");
+    const supportSubmit = document.getElementById("supportSubmit");
+
+    supportForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        supportSubmit.disabled = true;
+        supportSubmit.textContent = "Отправка...";
+        supportStatus.className = "support-form-status";
+        supportStatus.textContent = "";
+
+        try {
+            const response = await fetch("/support/send", {
+                method: "POST",
+                body: new FormData(supportForm),
+            });
+            const data = await response.json();
+
+            supportStatus.className = "support-form-status show";
+            supportStatus.textContent = data.message;
+            supportForm.reset();
+        } catch (err) {
+            supportStatus.className = "support-form-status show";
+            supportStatus.textContent = "Не удалось связаться с сервером.";
+        } finally {
+            supportSubmit.disabled = false;
+            supportSubmit.textContent = "Отправить заявку";
+        }
+    });
+</script>
+{% endblock %}

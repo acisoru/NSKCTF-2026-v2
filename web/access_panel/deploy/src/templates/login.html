@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page">
+    <div class="crt-header">
+        <div class="crt-title">&gt; ВХОД ДЛЯ СОТРУДНИКОВ<span class="cursor">_</span></div>
+        <div class="crt-subtitle">учётная запись сотрудника лаборатории</div>
+    </div>
+
+    <div class="auth-page">
+        <section class="card">
+            <h2>Вход для сотрудников</h2>
+            {% if user %}
+                <p class="logged-in">Вы уже вошли как <strong>{{ user }}</strong>.</p>
+                <p><a class="btn" href="/panel">Перейти к панели оператора</a></p>
+            {% else %}
+                {% if error %}
+                    <div class="error">{{ error }}</div>
+                {% endif %}
+                <form method="post" action="/login" class="auth-form">
+                    <div class="form-group">
+                        <label for="username">Логин</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Пароль</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit">Войти</button>
+                </form>
+            {% endif %}
+        </section>
+    </div>
+</div>
+{% endblock %}

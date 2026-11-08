@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page">
+    <div class="crt-header">
+        <div class="crt-title">&gt; СТАРАЯ ПАНЕЛЬ ДОПУСКА<span class="cursor">_</span></div>
+        <div class="crt-subtitle">учёт бейджей · архив 2018 года</div>
+    </div>
+
+    <div class="grid">
+        <section class="card">
+            <h2>Таблица допуска</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Имя</th>
+                        <th>Допуск</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for badge in badges %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ badge.name }}</td>
+                        <td><span class="badge-clearance">{{ badge.clearance }}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <section class="card">
+            <h2>Разделы панели</h2>
+            <p class="hint">часть записей сохранилась не полностью</p>
+            <ul class="quick-links">
+                <li><a href="/journal">Журнал выдачи карт <span class="arrow">&rarr;</span></a></li>
+                <li><a href="/alerts">Оповещения отделения <span class="arrow">&rarr;</span></a></li>
+                <li><a href="/support">Техническая поддержка <span class="arrow">&rarr;</span></a></li>
+                {% if user %}
+                <li><a href="/panel">Панель оператора <span class="arrow">&rarr;</span></a></li>
+                {% else %}
+                <li><a href="/login">Вход для сотрудников <span class="arrow">&rarr;</span></a></li>
+                {% endif %}
+            </ul>
+        </section>
+    </div>
+</div>
+{% endblock %}

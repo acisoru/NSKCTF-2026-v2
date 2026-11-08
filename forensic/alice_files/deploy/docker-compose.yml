@@ -1,0 +1,12 @@
+services:
+  yellow_dots_builder:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    restart: "no"
+    cpus: 2.0
+    mem_limit: 2g
+    network_mode: none
+    volumes:
+      - ../public:/out
+      - ../output:/task/output

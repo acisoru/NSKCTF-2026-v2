@@ -1,0 +1,15 @@
+services:
+  labx_observation_archive:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:34090:34090"
+    environment:
+      FLAG: "nskctf{the_archive_keeps_its_own_receipts}"
+    mem_limit: 1g
+    cpus: 1.5
+    init: true
+    security_opt:
+      - no-new-privileges:true

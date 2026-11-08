@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% set active = 'login' %}
+
+{% block content %}
+<div class="page-head">
+    <h1>Вход</h1>
+    <p class="subtitle">Авторизация наблюдателя</p>
+</div>
+
+<div class="auth-wrap">
+    <div class="card">
+        {% if user %}
+            <p class="lead">Вы вошли как <b>{{ user }}</b>.</p>
+            <a class="btn" href="/cards" style="margin-top:1rem;">Перейти к карточкам</a>
+        {% else %}
+            {% if notice %}<div class="alert alert-ok">{{ notice }}</div>{% endif %}
+            {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+            <form method="post" action="/login" class="form">
+                <label>Имя наблюдателя<input type="text" name="username" required autofocus></label>
+                <label>Пароль<input type="password" name="password" required></label>
+                <button class="btn" type="submit">Войти</button>
+            </form>
+            <p class="auth-switch">Нет учётной записи? <a href="/register">Зарегистрироваться</a></p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

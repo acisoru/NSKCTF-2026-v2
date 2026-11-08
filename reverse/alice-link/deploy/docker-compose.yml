@@ -1,0 +1,27 @@
+name: alice_link
+
+services:
+  alice_link_server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: server
+    environment:
+      FLAG: ${FLAG:?Set FLAG}
+      KEY_HEX: ${KEY_HEX:?Set KEY_HEX (32 bytes hex, must match client-derived key)}
+    ports:
+      - '0.0.0.0:18111:23231'
+    read_only: true
+    tmpfs: /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test: ['CMD', 'python', '-c', "import socket;s=socket.create_connection(('127.0.0.1',23231),2);s.recv(64);s.close()"]
+      interval: 15s
+      timeout: 3s
+      retries: 3
+    restart: unless-stopped
+    mem_limit: 128m
+    cpus: 0.5
